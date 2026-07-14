@@ -1,0 +1,93 @@
+% !TEX root = article.tex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ntv}[2026/07/14 NTV manuscript layout]
+
+\RequirePackage{fontspec}
+\IfFontExistsTF{Times New Roman}
+  {\setmainfont{Times New Roman}}
+  {\setmainfont{Liberation Serif}}
+\RequirePackage[english,russian]{babel}
+\addto\captionsrussian{\renewcommand{\figurename}{Рисунок}}
+\RequirePackage{geometry}
+\RequirePackage{setspace}
+\RequirePackage{titlesec}
+\RequirePackage{fancyhdr}
+\RequirePackage{indentfirst}
+\RequirePackage{caption}
+
+\geometry{
+  a4paper,
+  top=2.5cm,
+  right=1cm,
+  bottom=2cm,
+  left=2.5cm,
+  headheight=0pt,
+  headsep=0pt,
+  footskip=0.8cm
+}
+
+\renewcommand{\normalsize}{\fontsize{14}{24}\selectfont}
+\AtBeginDocument{\normalsize}
+\setstretch{1.0}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{2em}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\AtBeginDocument{\sloppy}
+
+% Word's centered metadata blocks use single spacing rather than the 1.5-line
+% spacing used for body paragraphs.
+\renewenvironment{center}
+  {\par\begingroup\centering\fontsize{14}{17}\selectfont}
+  {\par\endgroup}
+
+% Pandoc writes figures and tables as in-flow Word content.  Removing TeX's
+% default float padding gives the PDF the same vertical rhythm.
+\setlength{\intextsep}{0pt}
+\setlength{\textfloatsep}{0pt}
+\setlength{\floatsep}{0pt}
+
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries\centering}{}{0pt}{}
+\titlespacing*{\section}{0pt}{0pt}{0pt}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{0pt}{0pt}
+\titleformat{\paragraph}[runin]
+  {\normalfont\normalsize\bfseries}{}{0pt}{}[.]
+\titlespacing*{\paragraph}{\parindent}{0pt}{0.5em}
+
+\DeclareCaptionLabelSeparator{ntvdash}{~--~}
+\captionsetup{
+  font=normalfont,
+  labelfont=normalfont,
+  labelsep=ntvdash,
+  justification=centering,
+  singlelinecheck=false,
+  skip=0pt
+}
+\captionsetup[table]{skip=4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\normalsize\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begingroup
+  \setlength{\parindent}{0pt}%
+  \begin{center}
+    \vspace{23pt}%
+    \bfseries\@title\par
+    \vspace{26pt}
+    \normalfont\@author\par
+    \ifx\@date\@empty\else\@date\par\fi
+  \end{center}
+  \endgroup
+}
+\makeatother
+
+\newcommand{\ntvnoindent}{\par\noindent}

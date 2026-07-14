@@ -1,0 +1,45 @@
+{
+  "files.associations": {
+    "*.cls": "latex",
+    "*.sty": "latex"
+  },
+  "files.exclude": {
+    "**/build/**/*.aux": true,
+    "**/build/**/*.fdb_latexmk": true,
+    "**/build/**/*.fls": true,
+    "**/build/**/*.log": true,
+    "**/build/**/*.out": true,
+    "**/build/**/*.synctex.gz": true
+  },
+  "search.exclude": {
+    "**/build/**": true
+  },
+  "[latex]": {
+    "editor.rulers": [100],
+    "editor.wordWrap": "on"
+  },
+  "latex-workshop.latex.external.build.command": "make",
+  "latex-workshop.latex.external.build.args": [
+    "pdf",
+    "INPUT=%RELATIVE_DOC%"
+  ],
+  "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/build",
+  "latex-workshop.latex.build.enableMagicComments": true,
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.autoBuild.onSave.files.ignore": [],
+  "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+  "latex-workshop.latex.autoClean.run": "never",
+  "latex-workshop.latex.watch.files.ignore": [
+    "**/build/**"
+  ],
+  "latex-workshop.latex.clean.method": "command",
+  "latex-workshop.latex.clean.command": "make",
+  "latex-workshop.latex.clean.args": [
+    "clean"
+  ],
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.view.pdf.tab.editorGroup": "right",
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+  "latex-workshop.message.badbox.show": "none"
+}

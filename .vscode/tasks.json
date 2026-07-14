@@ -1,0 +1,128 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docker: Build LaTeX image",
+      "type": "shell",
+      "command": "make",
+      "args": ["docker-build"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "LaTeX: Build PDF from active file (Docker)",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "pdf",
+        "INPUT=${relativeFile}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "LaTeX: Build DOCX from active file (Docker)",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "docx",
+        "INPUT=${relativeFile}",
+        "OUTPUT=build/${fileBasenameNoExtension}.docx"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "LaTeX: Validate DOCX from active file (Docker)",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "validate",
+        "INPUT=${relativeFile}",
+        "OUTPUT=build/${fileBasenameNoExtension}.docx"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "LaTeX: Build PDF and DOCX (Docker)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "LaTeX: Build PDF from active file (Docker)",
+        "LaTeX: Build DOCX from active file (Docker)"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Project: First build (image, PDF, DOCX)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Docker: Build LaTeX image",
+        "Project: Build example PDF and DOCX"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Project: Build example PDF and DOCX",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "pdf",
+        "docx",
+        "INPUT=template/article.tex",
+        "OUTPUT=build/article.docx"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "LaTeX: Clean generated files",
+      "type": "shell",
+      "command": "make",
+      "args": ["clean"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

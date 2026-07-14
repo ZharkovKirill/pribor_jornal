@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" version="1.0" class="in-text" default-locale="ru-RU">
+  <info>
+    <title>NTV GOST numeric</title>
+    <id>https://example.org/styles/ntv-numeric</id>
+    <link href="https://example.org/styles/ntv-numeric" rel="self"/>
+    <updated>2026-07-14T00:00:00+00:00</updated>
+  </info>
+  <macro name="author">
+    <names variable="author">
+      <name name-as-sort-order="all" sort-separator=" " initialize-with=". " delimiter=", "/>
+      <substitute>
+        <text variable="title"/>
+      </substitute>
+    </names>
+  </macro>
+  <macro name="issued">
+    <date variable="issued">
+      <date-part name="year"/>
+    </date>
+  </macro>
+  <macro name="accessed">
+    <date variable="accessed" delimiter=".">
+      <date-part name="day" form="numeric-leading-zeros"/>
+      <date-part name="month" form="numeric-leading-zeros"/>
+      <date-part name="year"/>
+    </date>
+  </macro>
+  <citation collapse="citation-number">
+    <sort>
+      <key variable="citation-number"/>
+    </sort>
+    <layout prefix="[" suffix="]" delimiter=", ">
+      <text variable="citation-number"/>
+    </layout>
+  </citation>
+  <bibliography entry-spacing="0" line-spacing="1">
+    <sort>
+      <key variable="citation-number"/>
+    </sort>
+    <layout suffix=".">
+      <text variable="citation-number" suffix=". "/>
+      <text macro="author" suffix=". "/>
+      <text variable="title" suffix=" // "/>
+      <text variable="container-title" suffix=". "/>
+      <text macro="issued" suffix=". "/>
+      <group delimiter=", ">
+        <text variable="volume" prefix="Vol. "/>
+        <text variable="issue" prefix="No. "/>
+      </group>
+      <text variable="page" prefix=". P. "/>
+      <text variable="DOI" prefix=". DOI: "/>
+      <choose>
+        <if variable="URL">
+          <text variable="URL" prefix=". [Электронный ресурс]. Режим доступа: "/>
+          <text macro="accessed" prefix=" (дата обращения: " suffix=")"/>
+        </if>
+      </choose>
+    </layout>
+  </bibliography>
+</style>

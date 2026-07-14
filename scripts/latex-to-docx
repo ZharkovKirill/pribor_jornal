@@ -1,0 +1,79 @@
+#!/bin/sh
+set -eu
+
+usage() {
+    echo "Usage: latex-to-docx [INPUT.tex [OUTPUT.docx]]" >&2
+}
+
+case "${1:-}" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+esac
+
+if [ "$#" -gt 2 ]; then
+    usage
+    exit 2
+fi
+
+input=${1:-template/article.tex}
+output=${2:-build/article.docx}
+
+if [ ! -f "$input" ]; then
+    echo "Input file not found: $input" >&2
+    exit 2
+fi
+
+filter=${NTV_FILTER:-/opt/latex-to-docx/ntv.lua}
+reference_filter=${NTV_REFERENCE_FILTER:-/opt/latex-to-docx/references.lua}
+no_links_filter=${NTV_NO_LINKS_FILTER:-/opt/latex-to-docx/no-links.lua}
+csl=${NTV_CSL:-/opt/latex-to-docx/numeric.csl}
+preparer=${NTV_REFERENCE_PREPARER:-/opt/latex-to-docx/prepare_reference.py}
+
+mkdir -p "$(dirname "$output")"
+temporary_dir=$(mktemp -d)
+trap 'rm -rf "$temporary_dir"' EXIT HUP INT TERM
+prepared_reference="$temporary_dir/reference.docx"
+
+python3 "$preparer" "$prepared_reference"
+
+input_dir=$(dirname "$input")
+mwe_image=$(kpsewhich example-image.png || true)
+if [ -n "$mwe_image" ]; then
+    resource_path="$input_dir:.:assets:$(dirname "$mwe_image")"
+else
+    resource_path="$input_dir:.:assets"
+fi
+
+set -- pandoc "$input" \
+    --from=latex+raw_tex \
+    --to=docx \
+    --standalone \
+    --wrap=none \
+    --metadata=lang:ru-RU \
+    --resource-path="$resource_path" \
+    --reference-doc="$prepared_reference" \
+    --lua-filter="$reference_filter"
+
+bibliography_name=$(sed -n 's/^[[:space:]]*\\addbibresource[[:space:]]*{\([^}]*\)}.*$/\1/p' "$input" | head -n 1)
+if [ -n "$bibliography_name" ]; then
+    bibliography="$input_dir/$bibliography_name"
+    if [ ! -f "$bibliography" ]; then
+        echo "Bibliography file not found: $bibliography" >&2
+        exit 2
+    fi
+    set -- "$@" \
+        --bibliography="$bibliography" \
+        --csl="$csl" \
+        --citeproc
+fi
+
+set -- "$@" \
+    --lua-filter="$filter" \
+    --lua-filter="$no_links_filter" \
+    --output="$output"
+
+"$@"
+
+echo "Created $output"
