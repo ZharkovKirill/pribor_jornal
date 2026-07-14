@@ -22,6 +22,7 @@ VS Code without `sudo`. On Windows, open the project and run the tasks from WSL.
 3. Open `template/article.tex`. 
 4. run `make docker-build`
 5. run `make pdf`
+6. run `make docx`
 
 
 The repository settings use LaTeX Workshop's external-build support, so its
